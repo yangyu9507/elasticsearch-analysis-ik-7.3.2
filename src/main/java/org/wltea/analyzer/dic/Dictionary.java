@@ -626,22 +626,24 @@ public class Dictionary {
             }
 
 
-			String today = "hot_search_word" + LocalDateTime.now().toString(DateTimeFormat.forPattern("yyyyMMdd"));
-			String yestToday = "hot_search_word" + LocalDateTime.now().minusDays(1).toString(DateTimeFormat.forPattern("yyyyMMdd"));
+			LocalDateTime now = LocalDateTime.now();
+			String yestToday = "hot_search_word" + now.minusDays(1).toString(DateTimeFormat.forPattern("yyyyMMdd"));
+			String lastYestToday = "hot_search_word" + now.minusDays(2).toString(DateTimeFormat.forPattern("yyyyMMdd"));
 
-			String existSQL = String.format("SHOW TABLES LIKE '%s'",yestToday);
+			String existSQL = String.format("SHOW TABLES LIKE '%s'",lastYestToday);
 
 			stmt = conn.createStatement();
 
-			String tableName = yestToday;
+			String tableName = lastYestToday;
 			int existResult = stmt.executeUpdate(existSQL);
-			// 如果表不存在,则查询今天的表     不存在 = 0, 存在 = -1
+			// 如果前天的表不存在,则查询昨天的表     不存在 = 0, 存在 = -1
 			if (existResult == 0){
-				tableName = today;
+				tableName = yestToday;
 				existSQL = String.format("SHOW TABLES LIKE '%s'",tableName);
 				stmt = conn.createStatement();
 				existResult = stmt.executeUpdate(existSQL);
 				if (existResult == 0){
+                    Thread.sleep(Long.parseLong(String.valueOf(props.get("jdbc.reload.interval"))));
 					return;
 				}
 			}
