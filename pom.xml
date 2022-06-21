@@ -22,7 +22,7 @@
         <skip.unit.tests>true</skip.unit.tests>
         <gpg.keyname>4E899B30</gpg.keyname>
         <gpg.useagent>true</gpg.useagent>
-        <mysql-connector-java.version>5.1.22</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <testng.version>6.14.3</testng.version>
     </properties>
 
